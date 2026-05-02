@@ -1,3 +1,7 @@
+# ⚠️ VERALTET – Diese Datei ist eine ältere Version des Trackers.
+# Bitte stattdessen routine_tracker.py verwenden!
+# Diese Datei wird in einer zukünftigen Version entfernt.
+
 import json
 import os
 from datetime import datetime
