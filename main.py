@@ -47,8 +47,11 @@ def show_menu():
 def add_routine():
     name = input("Name der Routine: ")
     log_input(name)
+    category = input("Kategorie/Zeit (z.B. '9 Uhr', '23 Uhr'): ")
+    log_input(category)
     routine = {
         "name": name,
+        "category": category,
         "done": False
     }
     routines.append(routine)
@@ -64,7 +67,8 @@ def show_routines():
     print("\nDeine Routinen:")
     for index, routine in enumerate(routines, start=1):
         status = "✅" if routine["done"] else "⬜"
-        print(f"{index}. {status} {routine['name']}")
+        category = routine.get("category", "Keine Kategorie")
+        print(f"{index}. {status} [{category}] {routine['name']}")
 
 
 def mark_done():

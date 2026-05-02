@@ -199,3 +199,83 @@ Beim Programmstart wird `load_routines()` aufgerufen → alle bisherigen Routine
 ---
 
 *Status: ✅ Vollständig implementiert und dokumentiert*
+
+---
+
+## 🎯 Zusammenfassung der Änderungen (Session 5)
+**Zeitstempel**: 2026-05-02 16:52:24 UTC
+
+### Benutzer-Anfrage
+`Füge eine Kategorie zu jeder Routine hinzu, zum Beispiel 9 Uhr aufstehen, 23 Uhr schlafen gehen`
+
+### Implementierte Lösung
+
+#### Änderungen an der Routine-Struktur
+Routinen erweitert um das Feld `"category"`:
+```json
+{
+  "name": "aufstehen",
+  "category": "9 Uhr",
+  "done": false
+}
+```
+
+#### Code-Änderungen in main.py
+
+1. **`add_routine()` erweitert**
+   - Fragt nach: "Name der Routine:"
+   - Fragt nach: "Kategorie/Zeit (z.B. '9 Uhr', '23 Uhr'):"
+   - Beide Eingaben werden geloggt
+   - Kategorie wird in der Routine gespeichert
+
+2. **`show_routines()` erweitert**
+   - Zeigt jetzt Kategorie in eckigen Klammern vor dem Namen
+   - Format: `[Kategorie] Routine Name`
+   - Beispiel: `1. ⬜ [9 Uhr] aufstehen`
+   - Fallback: Zeigt "Keine Kategorie" wenn Feld fehlt (Rückwärts-Kompatibilität)
+
+#### Beispiel routines.json
+```json
+[
+  {
+    "name": "Joggen",
+    "category": "6 Uhr",
+    "done": true
+  },
+  {
+    "name": "aufstehen",
+    "category": "9 Uhr",
+    "done": false
+  },
+  {
+    "name": "schlafen gehen",
+    "category": "23 Uhr",
+    "done": false
+  }
+]
+```
+
+#### Ausgabe-Beispiel
+```
+=== Dev Routine Tracker ===
+1. Routine hinzufügen
+2. Routinen anzeigen
+3. Routine als erledigt markieren
+4. Fortschritt anzeigen
+5. Beenden
+
+Deine Routinen:
+1. ✅ [6 Uhr] Joggen
+2. ⬜ [9 Uhr] aufstehen
+3. ⬜ [23 Uhr] schlafen gehen
+```
+
+### Vorteile
+- 🕐 **Zeit-Management**: Routinen können zeitlich organisiert werden
+- 📅 **Flexibel**: Kategorien für beliebige Zwecke nutzbar
+- 🔄 **Persistent**: Kategorien werden in routines.json gespeichert
+- 🛡️ **Rückwärts-kompatibel**: Alte Routinen ohne Kategorie funktionieren weiterhin
+
+---
+
+*Status: ✅ Kategorie-System vollständig implementiert*

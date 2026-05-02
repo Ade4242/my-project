@@ -1,6 +1,17 @@
 [
   {
     "name": "Joggen",
+    "category": "6 Uhr",
     "done": true
+  },
+  {
+    "name": "aufstehen",
+    "category": "9 Uhr",
+    "done": false
+  },
+  {
+    "name": "schlafen gehen",
+    "category": "23 Uhr",
+    "done": false
   }
 ]

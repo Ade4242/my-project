@@ -1,0 +1,38 @@
+[
+  {
+    "id": "001",
+    "name": "Joggen",
+    "weekday": "Montag",
+    "time": "06:30",
+    "duration": 60,
+    "category": "Sport",
+    "increment": 5
+  },
+  {
+    "id": "002",
+    "name": "Coding Practice",
+    "weekday": "Dienstag",
+    "time": "09:00",
+    "duration": 90,
+    "category": "Lernen",
+    "increment": 10
+  },
+  {
+    "id": "003",
+    "name": "Meditation",
+    "weekday": "Mittwoch",
+    "time": "20:00",
+    "duration": 20,
+    "category": "Wellness",
+    "increment": 2
+  },
+  {
+    "id": "004",
+    "name": "Lesen",
+    "weekday": "Freitag",
+    "time": "19:00",
+    "duration": 45,
+    "category": "Bildung",
+    "increment": 0
+  }
+]
