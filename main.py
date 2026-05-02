@@ -1,9 +1,28 @@
+import json
+import os
+from datetime import datetime
+
 routines = []
 chat_log = ""
+ROUTINES_FILE = "routines.json"
+
+def load_routines():
+    global routines
+    if os.path.exists(ROUTINES_FILE):
+        try:
+            with open(ROUTINES_FILE, "r", encoding="utf-8") as f:
+                routines = json.load(f)
+        except json.JSONDecodeError:
+            routines = []
+    else:
+        routines = []
+
+def save_routines():
+    with open(ROUTINES_FILE, "w", encoding="utf-8") as f:
+        json.dump(routines, f, ensure_ascii=False, indent=2)
 
 def log_input(user_input):
     with open("user_inputs.log", "a") as log_file:
-        from datetime import datetime
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         entry = f"[{timestamp}] {user_input}\n"
         log_file.write(entry)
@@ -33,6 +52,7 @@ def add_routine():
         "done": False
     }
     routines.append(routine)
+    save_routines()
     print("Routine wurde hinzugefügt.")
 
 
@@ -57,6 +77,7 @@ def mark_done():
 
     if 1 <= choice <= len(routines):
         routines[choice - 1]["done"] = True
+        save_routines()
         print("Routine wurde als erledigt markiert.")
     else:
         print("Ungültige Nummer.")
@@ -74,6 +95,7 @@ def delete_routine():
 
     if 1 <= choice <= len(routines):
         deleted_routine = routines.pop(choice - 1)
+        save_routines()
         print(f"Routine '{deleted_routine['name']}' wurde gelöscht.")
     else:
         print("Ungültige Nummer.")
@@ -97,6 +119,8 @@ def show_progress():
     print(f"Fortschritt: {percent:.0f}%")
 
 
+load_routines()
+
 while True:
     show_menu()
     choice = input("Auswahl: ")
@@ -110,7 +134,7 @@ while True:
         mark_done()
     elif choice == "4":
         show_progress()
-    elif choice == "6":
+    elif choice == "5":
         print("Programm beendet.")
         break
     else:

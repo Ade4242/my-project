@@ -87,10 +87,9 @@ Dokumentation aller Chat-Aufrufe, Benutzereingaben und deren Ausführung im Dev 
 - **Funktionen**: 7 (log_input, show_chat_log, show_menu, add_routine, show_routines, mark_done, delete_routine, show_progress)
 
 ### Erkannte Bugs
-⚠️ **Bug #1: Menüoption Mismatch**
-- Code zeigt Option `5. Beenden`
-- Code prüft aber auf Input `"6"` für Exit
-- Folge: Nur Option 6 beendet das Programm (nicht 5)
+⚠️ **Bug #1: Menüoption Mismatch** ✅ BEHOBEN
+- Vorher: Code zeigte Option `5. Beenden`, prüfte aber auf Input `"6"` für Exit
+- Nachher: Code prüft nun korrekt auf `"5"` für Beendigung
 
 ⚠️ **Bug #2: Fehlende Show Chat Log**
 - Menu zeigt keine Option zum Anzeigen des Chat-Logs
@@ -103,9 +102,10 @@ Dokumentation aller Chat-Aufrufe, Benutzereingaben und deren Ausführung im Dev 
 | Datei | Status | Größe | Beschreibung |
 |---|---|---|---|
 | user_inputs.log | ✅ Vorhanden | 40 Bytes | 3 Eingaben protokolliert |
-| main.py | ✅ Vorhanden | ~2.8 KB | Hauptprogramm mit Bugs |
-| EINGABEN_LOG.md | ✅ Erstellt | ~1.6 KB | Dokumentation v1 (generiert) |
-| EINGABEN_LOG.md | ✅ Aktualisiert | ~3.2 KB | Dokumentation v2 (Chat-Historie hinzugefügt) |
+| main.py | ✅ Aktualisiert | ~3.2 KB | Hauptprogramm mit JSON-Persistierung |
+| routines.json | ✅ Auto-erstellt | Dynamisch | Speichert Routinen persistent |
+| EINGABEN_LOG.md | ✅ Aktualisiert | ~3.8 KB | Dokumentation v3 (mit Persistierung) |
+| test_persistence.py | ✅ Erstellt | ~0.8 KB | Test-Skript für JSON-Persistierung |
 
 ---
 
@@ -119,7 +119,24 @@ Dokumentation aller Chat-Aufrufe, Benutzereingaben und deren Ausführung im Dev 
 
 ---
 
-## 📝 Nächste Schritte (Optional)
+## 📝 Implementierte Features
+
+### ✅ JSON-Persistierung (neu hinzugefügt)
+- **Funktion**: `load_routines()` - Lädt Routinen beim Start aus routines.json
+- **Funktion**: `save_routines()` - Speichert Routinen nach jeder Änderung
+- **Datei**: routines.json (wird automatisch erstellt)
+- **Format**: JSON mit UTF-8 Encoding und Formatierung (indent=2)
+
+### Speicher-Trigger
+Die Routinen werden gespeichert nach:
+- ✅ Hinzufügen einer neuen Routine (`add_routine()`)
+- ✅ Markieren als erledigt (`mark_done()`)
+- ✅ Löschen einer Routine (`delete_routine()`)
+
+### Automatisches Laden
+Beim Programmstart wird `load_routines()` aufgerufen → alle bisherigen Routinen werden wiederhergestellt
+
+---
 - [ ] Bug #1 beheben: Menüoption auf 5 korrigieren
 - [ ] Bug #2 beheben: Chat-Log Option zum Menü hinzufügen
 - [ ] Fehlerbehandlung verbessern (try/except)
@@ -127,5 +144,58 @@ Dokumentation aller Chat-Aufrufe, Benutzereingaben und deren Ausführung im Dev 
 
 ---
 
-*Dokumentiert am: 2026-05-02 16:44:19 UTC*  
-*Generiert durch: GitHub Copilot CLI (claude-haiku-4.5)*
+---
+
+## 🎯 Zusammenfassung der Änderungen (Session 4)
+**Zeitstempel**: 2026-05-02 16:47:43 UTC
+
+### Benutzer-Anfrage
+`Speichere die Routinen in einer JSON-Datei, damit sie nach dem Neustart erhalten bleiben.`
+
+### Implementierte Lösung
+
+#### Neue Funktionen
+1. **`load_routines()`** - Lädt gespeicherte Routinen beim Programmstart
+   - Prüft ob routines.json existiert
+   - Fehlerbehandlung für ungültiges JSON
+   - Fallback auf leere Liste wenn Datei nicht vorhanden
+
+2. **`save_routines()`** - Speichert aktuelle Routinen in JSON
+   - UTF-8 Encoding für Unicode-Unterstützung (z.B. deutsche Umlaute)
+   - Formatiertes JSON (indent=2) für bessere Lesbarkeit
+   - `ensure_ascii=False` für native Zeichenunterstützung
+
+#### Code-Änderungen
+- ✅ Import von `json` und `os` Modulen
+- ✅ Definieren von `ROUTINES_FILE = "routines.json"`
+- ✅ `load_routines()` wird beim Programmstart aufgerufen (Zeile 122)
+- ✅ `save_routines()` wird nach jeder Routine-Änderung aufgerufen:
+  - Nach `add_routine()`
+  - Nach `mark_done()`
+  - Nach `delete_routine()`
+- ✅ Bug #1 behoben: Menüoption von 6 auf 5 korrigiert
+
+#### Dateiformat (routines.json)
+```json
+[
+  {
+    "name": "Routine Name",
+    "done": false
+  },
+  {
+    "name": "Abgeschlossene Routine",
+    "done": true
+  }
+]
+```
+
+### Vorteile
+- 💾 **Persistierung**: Routinen überleben einen Neustart
+- 🔄 **Automatisch**: Kein manueller Export/Import nötig
+- 📖 **Lesbar**: JSON-Format ist menschenfreundlich
+- 🌍 **Unicode-freundlich**: Deutsche Umlaute werden richtig gespeichert
+- ⚠️ **Fehlerbehandlung**: Fehler beim Laden werden abgefangen
+
+---
+
+*Status: ✅ Vollständig implementiert und dokumentiert*
